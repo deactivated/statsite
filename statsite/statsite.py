@@ -28,8 +28,8 @@ Statsite v%(version)s
 
 class Statsite(object):
     """
-    Statsite is the main entrypoint class for instantiating, configuring,
-    and running a Statsite server.
+    Statsite is the main entrypoint class for instantiating, configuring, and
+    running a Statsite server.
     """
 
     DEFAULT_SETTINGS = {
@@ -53,9 +53,9 @@ class Statsite(object):
 
     def __init__(self, settings={}):
         """
-        Initializes a new Statsite server instance. All configuration
-        must be done during instantiate. If configuration changes in the
-        future, a new statsite class must be created.
+        Initializes a new Statsite server instance. All configuration must be
+        done during instantiate. If configuration changes in the future, a new
+        statsite class must be created.
         """
         super(Statsite, self).__init__()
 
@@ -82,7 +82,8 @@ class Statsite(object):
                 "collector_cls": self._collector_cls,
                 "aggregator_cls": self._aggregator_cls,
                 "store_cls": self._store_cls,
-                "configuration": pprint.pformat(self.settings, width=60, indent=2)
+                "configuration": pprint.pformat(self.settings, width=60,
+                                                indent=2)
         })
 
         # Setup the store
@@ -105,8 +106,8 @@ class Statsite(object):
 
     def start(self):
         """
-        This starts the actual statsite server. This will run in a
-        separate thread and return immediately.
+        This starts the actual statsite server. This will run in a separate
+        thread and return immediately.
         """
         self.logger.info("Statsite starting")
         self._reset_timer()
@@ -119,11 +120,10 @@ class Statsite(object):
     def shutdown(self):
         """
         This shuts down the server by gracefully exiting the flusher,
-        aggregator, and collector. Exact behavior of "gracefully" exit
-        is up to the various components used, but by default this
-        will throw away any data received during the current flush
-        period, rather than immediately flushing it, since this can cause
-        inaccurate statistics.
+        aggregator, and collector. Exact behavior of "gracefully" exit is up to
+        the various components used, but by default this will throw away any
+        data received during the current flush period, rather than immediately
+        flushing it, since this can cause inaccurate statistics.
         """
         self.logger.info("Statsite shutting down")
         if self.timer:
@@ -134,9 +134,8 @@ class Statsite(object):
 
     def _enable_aliveness_check(self):
         """
-        This enables the TCP aliveness check, which is useful for tools
-        such as Monit, Nagios, etc. to verify that Statsite is still
-        alive.
+        This enables the TCP aliveness check, which is useful for tools such as
+        Monit, Nagios, etc. to verify that Statsite is still alive.
         """
         if self.aliveness_check:
             self.aliveness_check.shutdown()
@@ -148,7 +147,8 @@ class Statsite(object):
         port = int(self.settings["aliveness_check"]["port"])
 
         # Create the server
-        self.aliveness_check = SocketServer.TCPServer((host, port), AlivenessHandler)
+        self.aliveness_check = SocketServer.TCPServer((host, port),
+                                                      AlivenessHandler)
 
         # Run the aliveness check in a thread
         thread = threading.Thread(target=self.aliveness_check.serve_forever)
@@ -194,7 +194,8 @@ class Statsite(object):
         """
         Returns a new aggregator with the settings given at initialization.
         """
-        return self._aggregator_cls(metrics_settings=self.settings["metrics"], **self.settings["aggregator"])
+        return self._aggregator_cls(metrics_settings=self.settings["metrics"],
+                                    **self.settings["aggregator"])
 
     def _reset_timer(self):
         """
@@ -203,5 +204,6 @@ class Statsite(object):
         if self.timer:
             self.timer.cancel()
 
-        self.timer = threading.Timer(int(self.settings["flush_interval"]), self._on_timer)
+        self.timer = threading.Timer(int(self.settings["flush_interval"]),
+                                     self._on_timer)
         self.timer.start()

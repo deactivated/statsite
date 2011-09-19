@@ -16,16 +16,16 @@ from ..statsite import Statsite
 
 class StatsiteCommandError(Exception):
     """
-    This is the exception that will be raised if something goes wrong
-    executing the Statsite command.
+    This is the exception that will be raised if something goes wrong executing
+    the Statsite command.
     """
     pass
 
 class StatsiteCommand(object):
     TOPLEVEL_CONFIG_SECTION = "statsite"
     """
-    This is the section to use in the configuration file if you wish to
-    modify the top-level configuration.
+    This is the section to use in the configuration file if you wish to modify
+    the top-level configuration.
     """
 
     def __init__(self, args=None):
@@ -36,14 +36,15 @@ class StatsiteCommand(object):
         parser.add_option("-l", "--log-level", action="store", dest="log_level",
                           default=None, help="log level")
         parser.add_option("-s", "--setting", action="append", dest="settings",
-                          default=[], help="set a setting, e.g. collector.host=0.0.0.0")
+                          default=[],
+                          help="set a setting, e.g. collector.host=0.0.0.0")
         (self.options, _) = parser.parse_args(args)
 
         # Defaults
         self.statsite = None
 
-        # Parse the settings from file, and then from the command line,
-        # since the command line trumps any file-based settings
+        # Parse the settings from file, and then from the command line, since
+        # the command line trumps any file-based settings
         self.settings = {}
         if len(self.options.config_files) > 0:
             self._parse_settings_from_file(self.options.config_files)
@@ -52,7 +53,8 @@ class StatsiteCommand(object):
 
         # Setup the logger
         handler = logging.StreamHandler(sys.stdout)
-        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s:%(name)s:%(lineno)s %(message)s"))
+        handler.setFormatter(logging.Formatter(
+            "%(asctime)s %(levelname)s:%(name)s:%(lineno)s %(message)s"))
 
         logger = logging.getLogger("statsite")
         logger.addHandler(handler)
@@ -72,8 +74,8 @@ class StatsiteCommand(object):
         thread.start()
 
         # Apparently `thread.join` blocks the main thread and makes it
-        # _uninterruptable_, so we need to do this loop so that the main
-        # thread can respond to signal handlers.
+        # _uninterruptable_, so we need to do this loop so that the main thread
+        # can respond to signal handlers.
         while thread.isAlive():
             thread.join(0.2)
 

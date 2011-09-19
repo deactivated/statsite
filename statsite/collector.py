@@ -1,6 +1,5 @@
 """
-Contains the base class for collectors as well as the built-in UDP
-collector.
+Contains the base class for collectors as well as the built-in UDP collector.
 """
 
 import logging
@@ -11,31 +10,31 @@ import parser
 
 class Collector(object):
     """
-    Collectors should inherit from this class, which provides the
-    necessary interface and helpers for implementing a collector.
+    Collectors should inherit from this class, which provides the necessary
+    interface and helpers for implementing a collector.
     """
 
     def __init__(self, aggregator):
         """
         Initializes a collector. Subclasses can override this with custom
-        parameters if they want, but they _must_ call the superclass
-        init method.
+        parameters if they want, but they _must_ call the superclass init
+        method.
         """
         self.logger = logging.getLogger("statsite.collector")
         self.aggregator = aggregator
 
     def start(self):
         """
-        This method must be implemented by collectors, and is called
-        when the collector should be started. This method should block
-        forever while the collector runs.
+        This method must be implemented by collectors, and is called when the
+        collector should be started. This method should block forever while the
+        collector runs.
         """
         raise NotImplementedError("run must be implemented")
 
     def shutdown(self):
         """
-        This method will be called by a second thread to notify the
-        collector to shutdown, which it should immediately and gracefully.
+        This method will be called by a second thread to notify the collector
+        to shutdown, which it should immediately and gracefully.
         """
         raise NotImplementedError("shutdown must be implemented")
 
@@ -85,8 +84,8 @@ class Collector(object):
 
 class UDPCollector(Collector):
     """
-    This is a collector which listens for UDP packets, parses them,
-    and adds them to the aggregator.
+    This is a collector which listens for UDP packets, parses them, and adds
+    them to the aggregator.
     """
 
     def __init__(self, host="0.0.0.0", port=8125, **kwargs):
@@ -122,8 +121,8 @@ class UDPCollectorSocketServer(SocketServer.UDPServer):
 
 class UDPCollectorSocketHandler(SocketServer.BaseRequestHandler):
     """
-    Simple handler that receives UDP packets, parses them, and adds
-    them to the aggregator.
+    Simple handler that receives UDP packets, parses them, and adds them to the
+    aggregator.
     """
 
     def handle(self):
@@ -134,5 +133,5 @@ class UDPCollectorSocketHandler(SocketServer.BaseRequestHandler):
             # Add the parsed metrics to the aggregator
             metrics = self.server.collector._parse_metrics(message)
             self.server.collector._add_metrics(metrics)
-        except Exception, e:
+        except Exception:
             self.server.collector.logger.exception("Exception during processing UDP packet")
