@@ -59,7 +59,7 @@ class Counter(Metric):
     def fold(cls, lst, now):
         accumulator = {}
         for item in lst: item._fold(accumulator)
-        return [("counts.%s" % key,value,now) for key,value in accumulator.iteritems()]
+        return [("%s" % key,value,now) for key,value in accumulator.iteritems()]
 
     def _fold(self, accum):
         accum.setdefault(self.key, 0)
@@ -107,19 +107,19 @@ class Timer(Metric):
             val_max_pct = vals[upper_idx]
             val_stdev_pct = cls._stdev(vals_pct, val_avg_pct)
 
-            outputs.append(("timers.%s.sum" % key, val_sum, now))
-            outputs.append(("timers.%s.mean" % key, val_avg, now))
-            outputs.append(("timers.%s.lower" % key, val_min, now))
-            outputs.append(("timers.%s.upper" % key, val_max, now))
-            outputs.append(("timers.%s.count" % key, val_count, now))
-            outputs.append(("timers.%s.stdev" % key, val_stdev, now))
+            outputs.append(("%s.sum" % key, val_sum, now))
+            outputs.append(("%s.mean" % key, val_avg, now))
+            outputs.append(("%s.lower" % key, val_min, now))
+            outputs.append(("%s.upper" % key, val_max, now))
+            outputs.append(("%s.count" % key, val_count, now))
+            outputs.append(("%s.stdev" % key, val_stdev, now))
 
-            outputs.append(("timers.%s.sum_%d" % (key, percentile), val_sum_pct, now))
-            outputs.append(("timers.%s.mean_%d" % (key, percentile), val_avg_pct, now))
-            outputs.append(("timers.%s.lower_%d" % (key, percentile), val_min_pct, now))
-            outputs.append(("timers.%s.upper_%d" % (key, percentile), val_max_pct, now))
-            outputs.append(("timers.%s.count_%d" % (key, percentile), inner_indexes, now))
-            outputs.append(("timers.%s.stdev_%d" % (key, percentile), val_stdev_pct, now))
+            outputs.append(("%s.sum_%d" % (key, percentile), val_sum_pct, now))
+            outputs.append(("%s.mean_%d" % (key, percentile), val_avg_pct, now))
+            outputs.append(("%s.lower_%d" % (key, percentile), val_min_pct, now))
+            outputs.append(("%s.upper_%d" % (key, percentile), val_max_pct, now))
+            outputs.append(("%s.count_%d" % (key, percentile), inner_indexes, now))
+            outputs.append(("%s.stdev_%d" % (key, percentile), val_stdev_pct, now))
 
         return outputs
 
@@ -162,4 +162,3 @@ which are specified in the incoming messages to a
 class which implements that Metric type. If a short
 code is not in this dictionary it is not supported.
 """
-
